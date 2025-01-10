@@ -1,0 +1,5 @@
+flask
+flask-session
+werkzeug
+cs50
+gunicorn

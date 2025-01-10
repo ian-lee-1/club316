@@ -1,0 +1,46 @@
+CREATE TABLE IF NOT EXISTS trades (
+    id INTEGER NOT NULL,
+    transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    symbol TEXT NOT NULL,
+    name TEXT NOT NULL,
+    shares INTEGER NOT NULL,
+    price NUMERIC NOT NULL,
+    transacted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(id) REFERENCES users(id)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS unique_transaction ON trades (transaction_id);
+CREATE INDEX IF NOT EXISTS index_user ON trades (id);
+CREATE INDEX IF NOT EXISTS index_symbol ON trades (symbol);
+
+CREATE TABLE IF NOT EXISTS record (
+    id INTEGER NOT NULL,
+    transaction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    symbol TEXT NOT NULL,
+    shares INTEGER NOT NULL,
+    price NUMERIC NOT NULL,
+    method TEXT NOT NULL,
+    transacted TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS events (
+    event_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    host_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    location TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(host_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS rsvps (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    event_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(event_id) REFERENCES events(event_id)
+);
